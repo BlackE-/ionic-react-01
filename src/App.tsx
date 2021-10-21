@@ -2,7 +2,7 @@ import React, {useRef, useState } from 'react';
 
 import { IonApp, IonHeader , IonContent, IonToolbar, 
   IonTitle, IonGrid, IonRow, IonCol, IonLabel ,IonInput, 
-  IonItem, IonAlert } from '@ionic/react';
+  IonItem, IonAlert, IonCard, IonCardContent } from '@ionic/react';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -46,7 +46,6 @@ const App: React.FC = () => {
 
     const weight = +enteredWeight / weigthConversionFactor;
     const height = +enteredHeight / heightConversionFactor;
-
     const bmi = weight / (height * height);
     setCalculatedBMI(bmi);
 
@@ -59,55 +58,69 @@ const App: React.FC = () => {
 
   const clearError = () =>{
     setError('');
-  }
+  };
 
   const selectCalcUnitHandler = (selectedValue:'mkg' | 'ftlbs') =>{
       setCalcUnits(selectedValue);
   };
 
   return (
-  <React.Fragment>
-    <IonAlert 
-              isOpen={!!error} 
-              message={error} 
-              buttons={[{text:'OK',handler:clearError}]}></IonAlert>
-    <IonApp>
-      <IonHeader>
-        <IonToolbar color="primary">
-          <IonTitle>BMI CALCULATOR</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent className="ion-padding">
-        <IonGrid>
-          <IonRow>
-            <IonCol>
-              <InputControl selectedValue={calcUnits} onSelectValue={selectCalcUnitHandler}></InputControl>
-            </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>
-              <IonItem>
-                <IonLabel position="floating">Height ({calcUnits === 'mkg' ? 'meters' : 'feet'})</IonLabel>
-                <IonInput type="number" ref={heightInputRef}></IonInput>
-              </IonItem>
-            </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>
-              <IonItem>
-                <IonLabel position="floating">Weight ({calcUnits === 'mkg' ? 'kg' : 'lbs' })</IonLabel>
-                <IonInput type="number" ref={weightInputRef}></IonInput>
-              </IonItem>
-            </IonCol>
-          </IonRow>
-          <BMIControls onCalculate={calculateBMI} onReset={resetInputs}/>
-          { calculatedBMI && (
-            <BMIResult result={calculatedBMI}/>
-          )}
-        </IonGrid>
-      </IonContent>
-    </IonApp>
-  </React.Fragment>);
+    <React.Fragment>
+      <IonAlert 
+                isOpen={!!error} 
+                message={error} 
+                buttons={[{text:'OK',handler:clearError}]}></IonAlert>
+      <IonApp>
+        <IonHeader>
+          <IonToolbar color="primary">
+            <IonTitle>BMI CALCULATOR</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent className="ion-padding">
+          <IonGrid>
+            <IonRow>
+              <IonCol size-ms="8" offset-sm="2" size-md="6" offset-md="3">
+                <IonCard className="ion-no-margin">
+                  <IonCardContent>
+                    <IonGrid className="ion-no-padding">
+                      <IonRow>
+                        <IonCol>
+                          <InputControl selectedValue={calcUnits} onSelectValue={selectCalcUnitHandler}></InputControl>
+                        </IonCol>
+                      </IonRow>
+                      <IonRow>
+                        <IonCol>
+                          <IonItem>
+                            <IonLabel position="floating">Height ({calcUnits === 'mkg' ? 'meters' : 'feet'})</IonLabel>
+                            <IonInput type="number" ref={heightInputRef}></IonInput>
+                          </IonItem>
+                        </IonCol>
+                      </IonRow>
+                      <IonRow>
+                        <IonCol>
+                          <IonItem>
+                            <IonLabel position="floating">Weight ({calcUnits === 'mkg' ? 'kg' : 'lbs' })</IonLabel>
+                            <IonInput type="number" ref={weightInputRef}></IonInput>
+                          </IonItem>
+                        </IonCol>
+                      </IonRow>
+                      <BMIControls onCalculate={calculateBMI} onReset={resetInputs}/>
+                    </IonGrid>
+                  </IonCardContent>
+                </IonCard>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol>
+                { calculatedBMI && (
+                  <BMIResult result={calculatedBMI}/>
+                )}
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </IonContent>
+      </IonApp>
+    </React.Fragment>);
 };
 
 export default App;
